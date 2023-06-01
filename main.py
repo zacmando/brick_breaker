@@ -72,6 +72,9 @@ def game():
             brick_y = row * (BRICK_HEIGHT + BRICK_GAP) + 50
             bricks.append((brick_x, brick_y))
 
+    # Track key presses
+    keys = set()
+
     while True:
         # Event handling
         for event in pygame.event.get():
@@ -79,10 +82,16 @@ def game():
                 pygame.quit()
                 return
             if event.type == KEYDOWN:
-                if event.key == K_LEFT:
-                    paddle_x -= 10
-                if event.key == K_RIGHT:
-                    paddle_x += 10
+                keys.add(event.key)
+            if event.type == KEYUP:
+                if event.key in keys:
+                    keys.remove(event.key)
+
+        # Update paddle position based on key presses
+        if K_LEFT in keys:
+            paddle_x -= 15
+        if K_RIGHT in keys:
+            paddle_x += 15
 
         # Update ball position
         ball_x += ball_dx
